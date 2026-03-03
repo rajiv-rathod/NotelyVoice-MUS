@@ -209,6 +209,7 @@
     <string name="settings_model_selection">Model Selection</string>
     <string name="settings_model_selection_text">AI Model</string>
     <string name="settings_model_selection_description">Choose the model that best fits your needs</string>
+    <string name="ai_notes_generate">Generate AI Notes</string>
     <!-- AI Notes / BYOK -->
     <string name="ai_notes_section_title">AI Notes</string>
     <string name="ai_notes_transcribing">Transcribing audio…</string>

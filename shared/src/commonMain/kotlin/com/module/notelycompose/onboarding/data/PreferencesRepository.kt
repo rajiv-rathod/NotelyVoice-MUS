@@ -28,8 +28,8 @@ class PreferencesRepository(
         private val KEY_BODY_TEXT_SIZE = floatPreferencesKey("body_text_size")
         private val KEY_MODEL_SELECTION = intPreferencesKey("model_selection")
         private val KEY_AI_MODEL = stringPreferencesKey("ai_model")
-        private val KEY_AI_NOTES_TRANSCRIPT_PREFIX = "ai_transcript_"
-        private val KEY_AI_NOTES_JSON_PREFIX = "ai_notes_json_"
+        private const val AI_NOTES_TRANSCRIPT_PREFIX = "ai_transcript_"
+        private const val AI_NOTES_JSON_PREFIX = "ai_notes_json_"
     }
 
     suspend fun hasCompletedOnboarding(): Boolean {
@@ -108,16 +108,16 @@ class PreferencesRepository(
 
     suspend fun getAiNotesCache(noteId: Long): Pair<String, String>? {
         val prefs = dataStore.data.first()
-        val transcriptKey = stringPreferencesKey("$KEY_AI_NOTES_TRANSCRIPT_PREFIX$noteId")
-        val notesKey = stringPreferencesKey("$KEY_AI_NOTES_JSON_PREFIX$noteId")
+        val transcriptKey = stringPreferencesKey("$AI_NOTES_TRANSCRIPT_PREFIX$noteId")
+        val notesKey = stringPreferencesKey("$AI_NOTES_JSON_PREFIX$noteId")
         val transcript = prefs[transcriptKey] ?: return null
         val notesJson = prefs[notesKey] ?: return null
         return transcript to notesJson
     }
 
     suspend fun setAiNotesCache(noteId: Long, transcript: String, notesJson: String) {
-        val transcriptKey = stringPreferencesKey("$KEY_AI_NOTES_TRANSCRIPT_PREFIX$noteId")
-        val notesKey = stringPreferencesKey("$KEY_AI_NOTES_JSON_PREFIX$noteId")
+        val transcriptKey = stringPreferencesKey("$AI_NOTES_TRANSCRIPT_PREFIX$noteId")
+        val notesKey = stringPreferencesKey("$AI_NOTES_JSON_PREFIX$noteId")
         dataStore.edit { prefs ->
             prefs[transcriptKey] = transcript
             prefs[notesKey] = notesJson

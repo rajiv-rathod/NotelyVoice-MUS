@@ -13,7 +13,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://api.openai.com/v1"
-private const val MAX_RETRIES = 2
+private const val TOTAL_ATTEMPTS = 3
 private const val TIMEOUT_SECONDS = 120L
 
 private val json = Json {
@@ -131,7 +131,7 @@ class OpenAiHttpClient(
 
     private fun <T> executeWithRetry(request: Request, parser: (String) -> T): T {
         var lastException: Exception? = null
-        repeat(MAX_RETRIES + 1) { attempt ->
+        repeat(TOTAL_ATTEMPTS) { attempt ->
             try {
                 val response = client.newCall(request).execute()
                 val body = response.body?.string()
@@ -142,7 +142,7 @@ class OpenAiHttpClient(
                 return parser(body)
             } catch (e: Exception) {
                 lastException = e
-                if (attempt < MAX_RETRIES) {
+                if (attempt < TOTAL_ATTEMPTS - 1) {
                     Thread.sleep(1000L * (attempt + 1))
                 }
             }

@@ -46,6 +46,7 @@ import com.module.notelycompose.resources.Res
 import com.module.notelycompose.resources.ai_notes_action_items
 import com.module.notelycompose.resources.ai_notes_error_go_to_settings
 import com.module.notelycompose.resources.ai_notes_error_retry
+import com.module.notelycompose.resources.ai_notes_generate
 import com.module.notelycompose.resources.ai_notes_generating
 import com.module.notelycompose.resources.ai_notes_key_terms
 import com.module.notelycompose.resources.ai_notes_outline
@@ -97,7 +98,7 @@ fun AiNotesSection(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Generate AI Notes",
+                        text = stringResource(Res.string.ai_notes_generate),
                         fontSize = 14.sp
                     )
                 }
