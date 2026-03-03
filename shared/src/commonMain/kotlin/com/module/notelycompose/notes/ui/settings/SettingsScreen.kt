@@ -79,6 +79,9 @@ import com.module.notelycompose.resources.ic_export_selections
 import com.module.notelycompose.resources.navigate
 import org.jetbrains.compose.resources.painterResource
 import com.module.notelycompose.resources.transcription_model_selection
+import com.module.notelycompose.resources.ai_settings_title
+import com.module.notelycompose.resources.settings_ai_settings
+import com.module.notelycompose.resources.settings_ai_settings_desc
 
 @Composable
 fun SettingsScreen(
@@ -86,6 +89,7 @@ fun SettingsScreen(
     navigateToLanguages: () -> Unit,
     navigateToSettingsText: () -> Unit,
     navigateToModelSelection: () -> Unit,
+    navigateToAiSettings: () -> Unit = {},
     preferencesRepository: PreferencesRepository = koinInject()
 ) {
     val language by preferencesRepository.getDefaultTranscriptionLanguage()
@@ -139,6 +143,10 @@ fun SettingsScreen(
 
             item {
                 ExportSettingSection()
+            }
+
+            item {
+                AiSettingsSection(navigateToAiSettings = navigateToAiSettings)
             }
 
             item {
@@ -873,6 +881,57 @@ fun SettingsModelOptionCard(
                     text = model.size,
                     fontSize = 14.sp,
                     color = LocalCustomColors.current.modelSelectionDescColor
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun AiSettingsSection(navigateToAiSettings: () -> Unit) {
+    val colors = LocalCustomColors.current
+    Column {
+        Text(
+            text = stringResource(Res.string.ai_settings_title),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Medium,
+            color = colors.bodyContentColor,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(1.dp, colors.settingsBodyBorderColor, RoundedCornerShape(12.dp))
+                .clickable { navigateToAiSettings() },
+            colors = CardDefaults.cardColors(containerColor = colors.bodyBackgroundColor),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .background(colors.bodyBackgroundColor)
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(Res.string.settings_ai_settings),
+                        fontSize = 16.sp,
+                        color = colors.bodyContentColor
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(Res.string.settings_ai_settings_desc),
+                        fontSize = 14.sp,
+                        color = colors.settingsBodyTextColor,
+                        lineHeight = 20.sp
+                    )
+                }
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }

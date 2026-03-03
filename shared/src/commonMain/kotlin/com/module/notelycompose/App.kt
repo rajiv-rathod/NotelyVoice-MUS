@@ -22,6 +22,7 @@ import com.module.notelycompose.core.composableNoAnimation
 import com.module.notelycompose.core.composableWithHorizontalSlide
 import com.module.notelycompose.core.composableWithVerticalSlide
 import com.module.notelycompose.core.navigateSingleTop
+import com.module.notelycompose.ai.ui.AiSettingsScreen
 import com.module.notelycompose.export.ui.ExportNotesScreen
 import com.module.notelycompose.notes.ui.detail.NoteDetailScreen
 import com.module.notelycompose.notes.ui.list.InfoScreen
@@ -135,6 +136,9 @@ fun NoteAppRoot(platformUiState: PlatformUiState) {
                     },
                     navigateToModelSelection = {
                         navController.navigateSingleTop(Routes.LanguageModelSelection)
+                    },
+                    navigateToAiSettings = {
+                        navController.navigateSingleTop(Routes.AiSettings)
                     }
                 )
             }
@@ -172,6 +176,9 @@ fun NoteAppRoot(platformUiState: PlatformUiState) {
                     },
                     navigateToTranscription = {
                         navController.navigateSingleTop(Routes.Transcription)
+                    },
+                    navigateToAiSettings = {
+                        navController.navigateSingleTop(Routes.AiSettings)
                     },
                     editorViewModel = koinViewModel(viewModelStoreOwner = parentEntry),
                     onNavigateToSettingsText = {
@@ -216,6 +223,11 @@ fun NoteAppRoot(platformUiState: PlatformUiState) {
             }
             composableWithVerticalSlide<Routes.LanguageModelExplanation> {
                 ModelExplanationScreen(
+                    navigateBack = { navController.popBackStack() }
+                )
+            }
+            composableWithVerticalSlide<Routes.AiSettings> {
+                AiSettingsScreen(
                     navigateBack = { navController.popBackStack() }
                 )
             }
