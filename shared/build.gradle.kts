@@ -53,6 +53,10 @@ kotlin {
             // splash
             implementation(libs.core.splashscreen)
             implementation(libs.androidx.compose.documentfile)
+
+            // AI / Networking / Security (Android-only)
+            implementation(libs.okhttp)
+            implementation(libs.security.crypto)
         }
 
         commonMain.dependencies {

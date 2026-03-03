@@ -5,6 +5,10 @@ import com.module.notelycompose.FileSaverHandler
 import com.module.notelycompose.FileSaverLauncherHolder
 import com.module.notelycompose.FolderPickerHandler
 import com.module.notelycompose.FolderPickerLauncherHolder
+import com.module.notelycompose.ai.data.AiRepositoryImpl
+import com.module.notelycompose.ai.data.EncryptedKeyStore
+import com.module.notelycompose.ai.data.OpenAiHttpClient
+import com.module.notelycompose.ai.domain.AiRepository
 import com.module.notelycompose.audio.domain.AudioRecorderInteractor
 import com.module.notelycompose.audio.domain.AudioRecorderInteractorImpl
 import com.module.notelycompose.audio.domain.SaveAudioNoteInteractor
@@ -77,4 +81,9 @@ actual val platformModule = module {
             folderPickerHandler = get()
         )
     }
+
+    // AI / BYOK
+    single { EncryptedKeyStore(get()) }
+    single { OpenAiHttpClient(get()) }
+    single<AiRepository> { AiRepositoryImpl(get(), get(), get()) }
 }

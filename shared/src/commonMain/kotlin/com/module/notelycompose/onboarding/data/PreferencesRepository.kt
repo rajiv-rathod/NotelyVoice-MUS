@@ -27,6 +27,9 @@ class PreferencesRepository(
         private val KEY_MODEL_DOWNLOAD_ID = longPreferencesKey("model_download_id")
         private val KEY_BODY_TEXT_SIZE = floatPreferencesKey("body_text_size")
         private val KEY_MODEL_SELECTION = intPreferencesKey("model_selection")
+        private val KEY_AI_MODEL = stringPreferencesKey("ai_model")
+        private val KEY_AI_NOTES_TRANSCRIPT_PREFIX = "ai_transcript_"
+        private val KEY_AI_NOTES_JSON_PREFIX = "ai_notes_json_"
     }
 
     suspend fun hasCompletedOnboarding(): Boolean {
@@ -88,6 +91,36 @@ class PreferencesRepository(
     suspend fun setModelSelection(modelSelection: Int) {
         dataStore.edit { prefs ->
             prefs[KEY_MODEL_SELECTION] = modelSelection
+        }
+    }
+
+    fun getAiModel(): Flow<String> = dataStore.data.map { prefs ->
+        prefs[KEY_AI_MODEL] ?: "CHEAP"
+    }
+
+    suspend fun getAiModelSync(): String = dataStore.data.first()[KEY_AI_MODEL] ?: "CHEAP"
+
+    suspend fun setAiModel(modelName: String) {
+        dataStore.edit { prefs ->
+            prefs[KEY_AI_MODEL] = modelName
+        }
+    }
+
+    suspend fun getAiNotesCache(noteId: Long): Pair<String, String>? {
+        val prefs = dataStore.data.first()
+        val transcriptKey = stringPreferencesKey("$KEY_AI_NOTES_TRANSCRIPT_PREFIX$noteId")
+        val notesKey = stringPreferencesKey("$KEY_AI_NOTES_JSON_PREFIX$noteId")
+        val transcript = prefs[transcriptKey] ?: return null
+        val notesJson = prefs[notesKey] ?: return null
+        return transcript to notesJson
+    }
+
+    suspend fun setAiNotesCache(noteId: Long, transcript: String, notesJson: String) {
+        val transcriptKey = stringPreferencesKey("$KEY_AI_NOTES_TRANSCRIPT_PREFIX$noteId")
+        val notesKey = stringPreferencesKey("$KEY_AI_NOTES_JSON_PREFIX$noteId")
+        dataStore.edit { prefs ->
+            prefs[transcriptKey] = transcript
+            prefs[notesKey] = notesJson
         }
     }
 }

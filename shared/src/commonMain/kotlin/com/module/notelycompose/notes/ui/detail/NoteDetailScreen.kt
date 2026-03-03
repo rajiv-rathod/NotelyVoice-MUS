@@ -71,6 +71,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.module.notelycompose.audio.presentation.AudioPlayerViewModel
 import com.module.notelycompose.audio.ui.player.PlatformAudioPlayerUi
 import com.module.notelycompose.audio.ui.player.model.AudioPlayerUiState
+import com.module.notelycompose.ai.domain.model.AiNotesState
+import com.module.notelycompose.ai.presentation.AiNotesViewModel
+import com.module.notelycompose.ai.ui.AiNotesSection
 import com.module.notelycompose.modelDownloader.DownloaderDialog
 import com.module.notelycompose.modelDownloader.DownloaderEffect
 import com.module.notelycompose.modelDownloader.ModelDownloaderViewModel
@@ -103,10 +106,12 @@ fun NoteDetailScreen(
     navigateToRecorder: (noteId: String) -> Unit,
     navigateToTranscription: () -> Unit,
     onNavigateToSettingsText: () -> Unit,
+    navigateToAiSettings: () -> Unit = {},
     audioPlayerViewModel: AudioPlayerViewModel = koinViewModel(),
     downloaderViewModel: ModelDownloaderViewModel = koinViewModel(),
     platformViewModel: PlatformViewModel = koinViewModel(),
     audioImportViewModel: AudioImportViewModel = koinViewModel(),
+    aiNotesViewModel: AiNotesViewModel = koinViewModel(),
     editorViewModel: TextEditorViewModel,
     modelSelection: ModelSelection = koinInject()
 ) {
@@ -115,6 +120,7 @@ fun NoteDetailScreen(
     val downloaderUiState by downloaderViewModel.uiState.collectAsStateWithLifecycle()
     val editorState = editorViewModel.editorPresentationState.collectAsStateWithLifecycle().value
         .let { editorViewModel.onGetUiState(it) }
+    val aiNotesState by aiNotesViewModel.state.collectAsStateWithLifecycle()
 
     val audioPlayerUiState = audioPlayerViewModel.uiState.collectAsStateWithLifecycle().value
         .let { audioPlayerViewModel.onGetUiState(it) }
@@ -135,6 +141,7 @@ fun NoteDetailScreen(
     LaunchedEffect(Unit) {
         if (noteId.toLong() > 0L) {
             editorViewModel.onGetNoteById(noteId)
+            aiNotesViewModel.loadCachedNotes(noteId.toLong())
         }
         downloaderViewModel.effects.collect {
             when (it) {
@@ -281,6 +288,20 @@ fun NoteDetailScreen(
             audioPlayerUiState = audioPlayerUiState,
             textEditorViewModel = editorViewModel,
             audioPlayerViewModel = audioPlayerViewModel,
+            aiNotesState = aiNotesState,
+            onGenerateAiNotes = {
+                aiNotesViewModel.generateNotes(
+                    noteId.toLong(),
+                    editorState.recording.recordingPath
+                )
+            },
+            onRetryAiNotes = {
+                aiNotesViewModel.retry(
+                    noteId.toLong(),
+                    editorState.recording.recordingPath
+                )
+            },
+            onGoToAiSettings = navigateToAiSettings,
             onFocusChange = {
                 isTextFieldFocused = it
             },
@@ -392,6 +413,10 @@ private fun NoteContent(
     audioPlayerUiState: AudioPlayerUiState,
     textEditorViewModel: TextEditorViewModel,
     audioPlayerViewModel: AudioPlayerViewModel,
+    aiNotesState: AiNotesState,
+    onGenerateAiNotes: () -> Unit,
+    onRetryAiNotes: () -> Unit,
+    onGoToAiSettings: () -> Unit,
     onFabVisibility: (Boolean) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -468,6 +493,15 @@ private fun NoteContent(
                 textEditorViewModel = textEditorViewModel,
                 onFabVisibility = onFabVisibility
             )
+
+            if (editorState.recording.isRecordingExist) {
+                AiNotesSection(
+                    state = aiNotesState,
+                    onGenerate = onGenerateAiNotes,
+                    onRetry = onRetryAiNotes,
+                    onGoToSettings = onGoToAiSettings
+                )
+            }
         }
     }
     DeleteRecordingConfirmationDialog(

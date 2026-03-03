@@ -209,4 +209,29 @@
     <string name="settings_model_selection">Model Selection</string>
     <string name="settings_model_selection_text">AI Model</string>
     <string name="settings_model_selection_description">Choose the model that best fits your needs</string>
+    <!-- AI Notes / BYOK -->
+    <string name="ai_notes_section_title">AI Notes</string>
+    <string name="ai_notes_transcribing">Transcribing audio…</string>
+    <string name="ai_notes_generating">Generating notes…</string>
+    <string name="ai_notes_tldr">TL;DR</string>
+    <string name="ai_notes_outline">Outline</string>
+    <string name="ai_notes_key_terms">Key Terms</string>
+    <string name="ai_notes_action_items">Action Items</string>
+    <string name="ai_notes_study_questions">Study Questions</string>
+    <string name="ai_notes_error_retry">Retry</string>
+    <string name="ai_notes_error_go_to_settings">Go to Settings</string>
+    <!-- AI Settings (BYOK) -->
+    <string name="ai_settings_title">AI Settings</string>
+    <string name="ai_settings_api_key_label">OpenAI API Key</string>
+    <string name="ai_settings_api_key_hint">sk-…</string>
+    <string name="ai_settings_org_label">Organization ID (optional)</string>
+    <string name="ai_settings_org_hint">org-…</string>
+    <string name="ai_settings_security_note">Your API key is stored securely using Android Keystore-backed encryption and is never logged or transmitted anywhere other than OpenAI.</string>
+    <string name="ai_settings_model_label">AI Model for Notes</string>
+    <string name="ai_settings_cheap_model">Fast &amp; Affordable</string>
+    <string name="ai_settings_best_model">Best Quality</string>
+    <string name="ai_settings_save">Save</string>
+    <string name="ai_settings_clear_key">Reset / Clear Keys</string>
+    <string name="settings_ai_settings">AI Settings</string>
+    <string name="settings_ai_settings_desc">Configure OpenAI API key for AI notes</string>
 </resources>

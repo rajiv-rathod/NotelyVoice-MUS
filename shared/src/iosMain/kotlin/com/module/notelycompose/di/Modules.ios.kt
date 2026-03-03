@@ -1,6 +1,8 @@
 package com.module.notelycompose.di
 
 
+import com.module.notelycompose.ai.data.AiRepositoryStub
+import com.module.notelycompose.ai.domain.AiRepository
 import com.module.notelycompose.audio.domain.AudioRecorderInteractor
 import com.module.notelycompose.audio.domain.AudioRecorderInteractorImpl
 import com.module.notelycompose.database.NoteDatabase
@@ -49,4 +51,7 @@ actual val platformModule = module {
     // domain
     single<AudioRecorderInteractor> { AudioRecorderInteractorImpl(get(), get()) }
     single<ExportSelectionInteractor> { ExportSelectionInteractorImpl() }
+
+    // AI (stub for iOS)
+    single<AiRepository> { AiRepositoryStub() }
 }
